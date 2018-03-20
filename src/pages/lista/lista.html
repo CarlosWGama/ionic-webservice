@@ -1,0 +1,25 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Lista de Itens</ion-title>
+    
+    <!-- ICONS -->
+    <ion-buttons end>
+      <button ion-button icon-only (click)="adicionar()">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-list>
+    <ion-item *ngFor="let tarefa of tarefas" (click)="excluir(tarefa)" (press)="editar(tarefa)">
+      <h3>{{tarefa.titulo}}</h3>
+      <p text-right>{{tarefa.data | data_brasil}}</p>
+
+    </ion-item>
+  </ion-list>
+</ion-content>

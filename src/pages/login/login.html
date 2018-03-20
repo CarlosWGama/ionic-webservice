@@ -1,0 +1,20 @@
+<ion-content padding>
+
+  <h3 text-center>Sistema WebService</h3>
+  <ion-list>
+    <!-- LOGIN -->
+    <ion-item>
+      <ion-label floating >Email</ion-label>
+      <ion-input type="email" [(ngModel)]="usuario.login" ></ion-input>
+    </ion-item>
+    
+    <!-- SENHA -->
+    <ion-item>
+      <ion-label floating >Senha</ion-label>
+      <ion-input type="password"  [(ngModel)]="usuario.senha" ></ion-input>
+    </ion-item>
+
+    <button ion-button full (click)="logar()">Logar</button>
+  </ion-list>
+
+</ion-content>
