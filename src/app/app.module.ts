@@ -3,11 +3,15 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
+import { HttpClientModule } from '@angular/common/http';
+import { IonicStorageModule } from '@ionic/storage';
 
 import { MyApp } from './app.component';
 import { LoginPage } from '../pages/login/login';
 import { ListaPageModule } from '../pages/lista/lista.module';
 import { PipesModule } from '../pipes/pipes.module';
+import { UsuarioProvider } from '../providers/usuario/usuario';
+import { ListaProvider } from '../providers/lista/lista';
 
 @NgModule({
   declarations: [
@@ -18,7 +22,9 @@ import { PipesModule } from '../pipes/pipes.module';
     BrowserModule,
     IonicModule.forRoot(MyApp),
     PipesModule,
-    ListaPageModule
+    ListaPageModule,
+    HttpClientModule,
+    IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -28,7 +34,9 @@ import { PipesModule } from '../pipes/pipes.module';
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    UsuarioProvider,
+    ListaProvider
   ]
 })
 export class AppModule {}

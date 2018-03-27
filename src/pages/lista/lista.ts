@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, AlertController } from 'ionic-angular';
+import { ListaProvider } from '../../providers/lista/lista';
+import { Tarefa } from '../../models/Tarefa';
+import { LoginPage } from '../login/login';
+import { UsuarioProvider } from '../../providers/usuario/usuario';
 
 @IonicPage()
 @Component({
@@ -8,9 +12,21 @@ import { IonicPage, NavController, AlertController } from 'ionic-angular';
 })
 export class ListaPage {
 
-  tarefas: {titulo: string, data: string}[] = [];
+  tarefas: Tarefa[] = [];
 
-  constructor(public navCtrl: NavController, public alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public alertCtrl: AlertController, public listaProvider: ListaProvider) {
+  }
+
+  ionViewDidLoad() {
+    this.listaProvider.listar().then((tarefas: Tarefa[]) => {
+      console.log(tarefas);
+      this.tarefas = tarefas;
+    }).catch((erro) => {
+      if (erro.status == 403)
+        this.navCtrl.setRoot(LoginPage);
+      else
+        this.alertCtrl.create({message: erro.message}).present();
+    });
   }
 
   adicionar() {
@@ -24,7 +40,15 @@ export class ListaPage {
       ],
       buttons: [
         {text: "Cadastrar", handler: (dados) => {
-          this.tarefas.push(dados)
+          this.listaProvider.cadastrar(dados).then((tarefas: Tarefa[]) => {
+            console.log(tarefas);
+            this.tarefas = tarefas;
+          }).catch((erro) => {
+            if (erro.status == 403)
+              this.navCtrl.setRoot(LoginPage);
+            else
+              this.alertCtrl.create({message: "Erro ao cadastrar"}).present();
+          });
         }},
         {text: "Cancelar", role: "cancel"}
       ]
@@ -32,7 +56,7 @@ export class ListaPage {
   }
 
 
-  editar(tarefa: {titulo: string, data: string}) {
+  editar(tarefa: Tarefa) {
     this.alertCtrl.create({
       enableBackdropDismiss: false,
       title: "Editar Tarefa - " + tarefa.titulo ,
@@ -43,8 +67,16 @@ export class ListaPage {
       ],
       buttons: [
         {text: "Atualizar", handler: (dados) => {
-          let index = this.tarefas.indexOf(tarefa);
-          this.tarefas[index] = dados;
+          dados.id = tarefa.id; 
+          this.listaProvider.atualizar(dados).then((tarefas: Tarefa[]) => {
+            console.log(tarefas);
+            this.tarefas = tarefas;
+          }).catch((erro) => {
+            if (erro.status == 403)
+              this.navCtrl.setRoot(LoginPage);
+            else
+              this.alertCtrl.create({message: "Erro ao cadastrar"}).present();
+          });
         }},
         {text: "Cancelar", role: "cancel"}
       ]
@@ -58,8 +90,15 @@ export class ListaPage {
       message: "Deseja realmente marcar tarefa como concluída? Ela será removida da sua lista e não terá como recuperá-la",
       buttons: [
         {text: "OK", handler: () => {
-          let index = this.tarefas.indexOf(tarefa);
-          this.tarefas.splice(index, 1);
+          this.listaProvider.deletar(tarefa.id).then((tarefas: Tarefa[]) => {
+            console.log(tarefas);
+            this.tarefas = tarefas;
+          }).catch((erro) => {
+            if (erro.status == 403)
+              this.navCtrl.setRoot(LoginPage);
+            else
+              this.alertCtrl.create({message: "Erro ao cadastrar"}).present();
+          });
         }},
         {text: "Cancelar", role: "cancel"}
       ]
