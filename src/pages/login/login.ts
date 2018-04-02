@@ -33,7 +33,26 @@ export class LoginPage {
         message: "Usuário ou Senha Incorreta"
       }).present();
     }
-    
+  }
+
+  cadastrar() {
+    this.alertCtrl.create({
+      title: "Cadastrar novo usuário",
+      inputs: [
+        {name: "email", placeholder: "E-mail", type: "email"},
+        {name: "senha", placeholder: "Senha", type: "password"}
+      ],
+      buttons: [
+        {text:"Cancelar", role:"cancel"},
+        {text: "Cadastrar", handler: (dados) => {
+          
+          this.alertCtrl.create({
+            title: "Novo usuário cadastrado",
+            message: "Email: " + dados.email + " <br/> Senha: " + dados.senha
+          }).present();
+        }}
+      ]
+    }).present();
   }
 
 }
